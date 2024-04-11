@@ -1,5 +1,6 @@
 import { google } from 'googleapis';
 
+console.log("222")
 const auth = new google.auth.GoogleAuth({
   keyFile: 'test-project-416721-2793f35c89a6.json',
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
