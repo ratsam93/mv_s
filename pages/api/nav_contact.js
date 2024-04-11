@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const { name, email, message } = req.body;
-
+      console.log("1")
       const timestamp = new Date().toISOString();
 
       const response = await sheets.spreadsheets.values.append({
