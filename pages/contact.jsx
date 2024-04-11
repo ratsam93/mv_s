@@ -1,6 +1,112 @@
 import PageBanner from "@/src/components/PageBanner";
 import Layout from "@/src/layout/Layout";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import styled from 'styled-components'; // Import styled-components for styling
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); // Semi-transparent black overlay
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; // Set z-index to ensure it appears above other elements
+`;
+
+const PopupCard = styled.div`
+  background-color: white;
+  padding: 100px; // Increase the padding to increase the size of the popup
+  border-radius: 5px;
+`;
+
+const ClickButton = styled.button`
+  background-color: #008000;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+
+const Popup = ({ togglePopup }) => (
+  <Overlay>
+    <PopupCard>
+      <h1 style={{ fontSize: '24px', color: 'green' }}>Form Submitted.</h1><br/>
+      <ClickButton onClick={togglePopup}>Close</ClickButton>
+    </PopupCard>
+  </Overlay>
+);
+
+
 const Contact = () => {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  // const [popupMessage, setPopupMessage] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          name,
+          phone,
+          email,
+          message,
+        }),
+      });
+
+      if (response.ok) {
+        // setPopupMessage("Submitted successfully!");
+        setShowPopup(true);
+        resetForm();
+        setTimeout(() => {
+          setShowPopup(false);
+        }, 10000);
+      } else {
+        console.error('Error:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const resetForm = () => {
+    setEmail("");
+    setName("");
+    setPhone("");
+    setMessage("");
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (name === "name") {
+      setName(value);
+    } else if (name === "phone") {
+      setPhone(value);
+    } else if (name === "email") {
+      setEmail(value);
+    } else if (name === "message") {
+      setMessage(value);
+    }
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
+  };
+
   return (
     <Layout footer={5} singleMenu dark>
       {/* Page Banner Start */}
@@ -20,13 +126,13 @@ const Contact = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className="row gap-80 pb-30">
+                <div className="row gap-80 pb-30">
                   <div className="col-sm-6">
                     <div className="our-location-address mb-40">
-                      <h5>New York</h5>
+                      {/* <h5>New York</h5>
                       <p>
                         55 One State Road, 2nd Block New York, United States
-                      </p>
+                      </p> */}
                       <a className="mailto" href="mailto:support@gmail.com">
                         connect@maneuverventures.com
                       </a>
@@ -36,7 +142,7 @@ const Contact = () => {
                       </a>
                     </div>
                   </div>
-                  <div className="col-sm-6">
+                  {/* <div className="col-sm-6">
                     <div className="our-location-address mb-40">
                       <h5>Australia</h5>
                       <p>67 One State Road, 2nd Block Melbourne, Australia</p>
@@ -48,8 +154,8 @@ const Contact = () => {
                         <i className="fas fa-phone" /> +000 (123) 456 88
                       </a>
                     </div>
-                  </div>
-                </div> */}
+                  </div> */}
+                </div>
                 <h4>Follow Us</h4>
                 <div className="social-style-two pt-15">
                   <a href="https://twitter.com/ManeuverVenture">
@@ -72,87 +178,69 @@ const Contact = () => {
             <div className="col-xl-5 col-lg-6">
               <div className="contact-page-form form-style-one wow fadeInUp delay-0-2s">
                 <div className="section-title mb-35">
-                  <span className="sub-title mb-15">Get Free Quote</span>
+                  {/* <span className="sub-title mb-15">Message Us</span> */}
                   <h3>Drop Us a Message</h3>
                 </div>
-                <form
-                  id="contactForm"
-                  className="contactForm"
-                  action="assets/php/form-process.php"
-                  name="contactForm"
-                  method="post"
-                >
+                <form onSubmit={handleSubmit}>
                   <div className="row gap-60 pt-15">
                     <div className="col-md-12">
                       <div className="form-group">
-                        <label htmlFor="name">
-                          <i className="far fa-user" />
-                        </label>
+                        <label htmlFor="name"><i className="far fa-user" /></label>
                         <input
                           type="text"
                           id="name"
                           name="name"
                           className="form-control"
-                          // defaultValue
                           placeholder="Full Name"
+                          value={name}
+                          onChange={handleChange}
                           required
-                          data-error="Please enter your name"
                         />
-                        <div className="help-block with-errors" />
                       </div>
                     </div>
                     <div className="col-md-12">
                       <div className="form-group">
-                        <label htmlFor="phone_number">
-                          <i className="far fa-phone" />
-                        </label>
+                        <label htmlFor="phone"><i className="far fa-phone" /></label>
                         <input
                           type="text"
-                          id="phone_number"
-                          name="phone_number"
+                          id="phone"
+                          name="phone"
                           className="form-control"
-                          // defaultValue
                           placeholder="Phone"
+                          value={phone}
+                          onChange={handleChange}
                           required
-                          data-error="Please enter your Number"
                         />
-                        <div className="help-block with-errors" />
                       </div>
                     </div>
                     <div className="col-md-12">
                       <div className="form-group">
-                        <label htmlFor="email">
-                          <i className="far fa-envelope" />
-                        </label>
+                        <label htmlFor="email"><i className="far fa-envelope" /></label>
                         <input
                           type="email"
                           id="email"
                           name="email"
                           className="form-control"
-                          // defaultValue
                           placeholder="Email Address"
+                          value={email}
+                          onChange={handleChange}
                           required
-                          data-error="Please enter your Email Address"
                         />
-                        <div className="help-block with-errors" />
                       </div>
                     </div>
                     <div className="col-md-12">
                       <div className="form-group">
-                        <label htmlFor="message">
-                          <i className="far fa-pencil" />
-                        </label>
+                        <label htmlFor="message"><i className="far fa-pencil" /></label>
                         <textarea
                           name="message"
                           id="message"
                           className="form-control"
                           rows={2}
                           placeholder="Message"
+                          value={message}
+                          onChange={handleChange}
                           required
-                          data-error="Please enter your Message"
-                          defaultValue={""}
                         />
-                        <div className="help-block with-errors" />
                       </div>
                     </div>
                     <div className="col-md-12">
@@ -161,9 +249,9 @@ const Contact = () => {
                           type="submit"
                           className="theme-btn style-two w-100"
                         >
-                          Send Message us <i className="far fa-arrow-right" />
+                          Message us <i className="far fa-arrow-right" />
                         </button>
-                        <div id="msgSubmit" className="hidden" />
+                        {/* <div id="msgSubmit" className="hidden" /> */}
                       </div>
                     </div>
                   </div>
@@ -173,23 +261,7 @@ const Contact = () => {
           </div>
         </div>
       </section>
-      {/* Contact Form Area end */}
-      {/* Location Map Area Start */}
-      {/* <div className="contact-page-map mb-120 rpb-90 wow fadeInUp delay-0-2s">
-        <div className="container-fluid">
-          <div className="our-location">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m12!1m10!1m3!1d142190.2862584524!2d-74.01298319978558!3d40.721725351435126!2m1!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sbd!4v1663473911885!5m2!1sen!2sbd"
-              style={{ border: 0, width: "100%" }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          </div>
-        </div>
-      </div> */}
-      {/* Location Map Area End */}
-      {/* footer area start */}
+      {showPopup && <Popup togglePopup={closePopup} />}
     </Layout>
   );
 };

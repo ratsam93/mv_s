@@ -44,7 +44,7 @@ const DefaultHeader = ({ singleMenu, dark }) => {
                   <a href="https://api.whatsapp.com/send?phone=919970050313">9970050313</a>
                 </div>
               </div>
-              {/* menu sidbar */}
+              {/* menu sidebar */}
               <div className="menu-sidebar">
                 <button>
                   <img src="assets/images/icons/toggler.svg" alt="Toggler" />

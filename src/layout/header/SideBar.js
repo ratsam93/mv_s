@@ -1,5 +1,64 @@
 import { Fragment } from "react";
+import { useState } from "react";
+import { useRouter } from "next/router";
+
 const SideBar = () => {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
+  const [showSubmitMessage, setShowSubmitMessage] = useState(false);
+
+  const router = useRouter();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch('/api/nav_contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          name,
+          email,
+          message,
+        }),
+      });
+
+      if (response.ok) {
+        setShowSubmitMessage(true); // Show submit message
+        resetForm();
+        setTimeout(() => {
+          setShowSubmitMessage(false); // Hide submit message after 3 seconds
+        }, 10000);
+      } else {
+        console.error('Error:', response.statusText);
+        // Handle error
+      }
+    } catch (error) {
+      console.error('Error: outside', error);
+      // Handle error
+    }
+  };
+
+  const resetForm = () => {
+    setEmail("");
+    setName("");
+    setMessage("");
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (name === "email") {
+      setEmail(value);
+    } else if (name === "message") {
+      setMessage(value);
+    }
+    else if (name === "name") {
+      setName(value);
+    }
+  };
+
   return (
     <Fragment>
       <div className="form-back-drop"></div>
@@ -13,27 +72,35 @@ const SideBar = () => {
           </div>
           {/*Appointment Form*/}
           <div className="appointment-form">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                document
-                  .querySelector("body")
-                  .classList.remove("side-content-visible");
-              }}
-            >
+            <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <input type="text" name="text" placeholder="Name" required />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={name}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="form-group">
                 <input
                   type="email"
                   name="email"
                   placeholder="Email Address"
+                  value={email}
+                  onChange={handleChange}
                   required
                 />
               </div>
               <div className="form-group">
-                <textarea placeholder="Message" rows={5} />
+                <textarea
+                  name="message"
+                  placeholder="Message"
+                  rows={5}
+                  value={message}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-group">
                 <button type="submit" className="theme-btn">
@@ -41,6 +108,8 @@ const SideBar = () => {
                 </button>
               </div>
             </form>
+            {/* Submit message */}
+            {showSubmitMessage && <p>Form submitted successfully!</p>}
           </div>
           {/*Social Icons*/}
           <div className="social-style-one">
