@@ -7,12 +7,13 @@ const auth = new google.auth.GoogleAuth({
 });
 const sheets = google.sheets({ version: 'v4', auth });
 
+console.log("33333")
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
-      const { name, email, message } = req.body;
-      console.log("1")
-      const timestamp = new Date().toISOString();
+      const { timestamp, name, email, message } = req.body;
+      console.log("44444")
+      // const timestamp = new Date().toISOString();
 
       const response = await sheets.spreadsheets.values.append({
         spreadsheetId: '1tSs4Mil5vs9s3bvTla5dwzNbXRpynusLqK0kSgwVhdI',
