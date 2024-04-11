@@ -1,19 +1,17 @@
 import { google } from 'googleapis';
 
-console.log("222")
 const auth = new google.auth.GoogleAuth({
   keyFile: 'test-project-416721-2793f35c89a6.json',
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 const sheets = google.sheets({ version: 'v4', auth });
 
-console.log("33333")
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
-      const { timestamp, name, email, message } = req.body;
-      console.log("44444")
-      // const timestamp = new Date().toISOString();
+      const { name, email, message } = req.body;
+
+      const timestamp = new Date().toISOString();
 
       const response = await sheets.spreadsheets.values.append({
         spreadsheetId: '1tSs4Mil5vs9s3bvTla5dwzNbXRpynusLqK0kSgwVhdI',
