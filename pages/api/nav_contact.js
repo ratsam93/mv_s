@@ -1,7 +1,10 @@
 import { google } from 'googleapis';
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: 'test-project-416721-2793f35c89a6.json',
+  credentials: {
+    client_email: process.env.CLIENT_MAIL,
+    private_key: process.env.PRIVATE_KEY, // Replace newline characters
+  },
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 const sheets = google.sheets({ version: 'v4', auth });
