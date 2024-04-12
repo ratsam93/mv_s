@@ -1,62 +1,23 @@
 import { useState } from "react";
 import Layout from "@/src/layout/Layout";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Unsubscribe = () => {
   const [email, setEmail] = useState("");
-  const [comments, setComments] = useState(""); // State to capture the additional comments
-
   const router = useRouter();
 
-  const handleUnsubscribe = async (event) => {
+  const handleUnsubscribe = (event) => {
     event.preventDefault();
-    try {
-      const response = await fetch('/api/unsubscribed', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          timestamp: new Date().toISOString(),
-          email,
-          comments,
-        }),
-      });
-
-    //   if (response.ok) {
-    //     // Store email in local storage
-    //     localStorage.setItem('unsubscribe_email', email);
-    //     // Redirect to subscription successful page
-    //     router.push(`/UnsubscribeSuccessful`);
-    //   } else {
-    //     console.error('Error:', response.statusText);
-    //     // Handle error
-    //   }
-    // } catch (error) {
-    //   console.error('Error: outside', error);
-    //   // Handle error
-    // }
-
-      if (response.ok) {
-        // Redirect to subscription successful page with email query parameter
-        router.push(`/UnsubscribeSuccessful?email=${encodeURIComponent(email)}`);
-      } else {
-        console.error('Error:', response.statusText);
-        // Handle error
-      }
-    } catch (error) {
-      console.error('Error: outside', error);
-      // Handle error
-    }
+    // Code to handle unsubscribe logic goes here
+    console.log("Unsubscribe logic goes here...");
+    
+    // Redirect to subscription successful page with email query parameter
+    router.push(`/UnsubscribeSuccessful?email=${encodeURIComponent(email)}`);
   };
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
-    if (name === "email") {
-      setEmail(value);
-    } else if (name === "comments") {
-      setComments(value);
-    }
+    setEmail(event.target.value);
   };
 
   return (
@@ -76,16 +37,37 @@ const Unsubscribe = () => {
                   <div className="mb-20">
                     <input
                       type="email"
-                      name="email"
                       placeholder="Enter your email address"
                       value={email}
                       onChange={handleChange}
                       required
                     />
                   </div>
+                  <div className="unsubscribe-reason mb-20">
+                    <h3>Why are you unsubscribing?</h3>
+                    <ul>
+                      <li>
+                        <input type="checkbox" id="tooManyEmails" />
+                        <label htmlFor="tooManyEmails">Too many emails</label>
+                      </li>
+                      <li>
+                        <input type="checkbox" id="notRelevant" />
+                        <label htmlFor="notRelevant">Content not relevant</label>
+                      </li>
+                      <li>
+                        <input type="checkbox" id="foundWhatLookingFor" />
+                        <label htmlFor="foundWhatLookingFor">Found what I was looking for</label>
+                      </li>
+                      <li>
+                        <input type="checkbox" id="otherReason" />
+                        <label htmlFor="otherReason">Other (please specify)</label>
+                        <input type="text" id="otherReasonText" placeholder="Specify reason" />
+                      </li>
+                    </ul>
+                  </div>
                   <div className="additional-comments mb-20">
                     <label htmlFor="comments">Additional comments (optional):</label>
-                    <textarea id="comments" name="comments" rows="4" cols="50" value={comments} onChange={handleChange}></textarea>
+                    <textarea id="comments" name="comments" rows="4" cols="50"></textarea>
                   </div>
                   <button type="submit" className="theme-btn style-two">
                     Unsubscribe <i className="far fa-arrow-right" />
