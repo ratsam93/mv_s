@@ -49,7 +49,7 @@ const About = () => {
       <div className="video-area-two rel z-1">
         <div className="container-fluid">
           <div className="video-part style-two mb-40 wow fadeInUp delay-0-2s">
-            <img src="assets/images/video/video-two-bg.jpg" alt="Video" />
+            <img src="assets/images/video/video.png" alt="Video" />
             <a
               href="/assets/videos/8064305-hd_1920_1080_30fps.mp4"
               className="mfp-iframe video-play"

@@ -429,7 +429,7 @@ const index5OnePage = () => {
       <div className="video-area-five rel z-1">
         <div className="container container-1290">
           <div className="video-part style-three wow fadeInUp delay-0-2s">
-            <img src="assets/images/video/video-five-bg.jpg" alt="Video" />
+            <img src="assets/images/video/video.png" alt="Video" />
             {/* <a
               href="https://www.youtube.com/watch?v=9Y7ma241N8k"
               className="mfp-iframe video-play"
@@ -445,6 +445,7 @@ const index5OnePage = () => {
           </div>
         </div>
       </div>
+      <br/>
       {/* Video Area end */}
       {/* Team Area start */}
       {/* <section className="team-area pt-130 rpt-100 pb-100 rpb-70">

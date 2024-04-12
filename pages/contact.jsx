@@ -137,8 +137,8 @@ const Contact = () => {
                         connect@maneuverventures.com
                       </a>
                       <br />
-                      <a className="callto" href="callto:+00012345688">
-                        <i className="fas fa-phone" /> +000 (123) 456 88
+                      <a className="callto" href="callto:+919970050313">
+                        <i className="fas fa-phone" /> +91 9970050313
                       </a>
                     </div>
                   </div>

@@ -1,6 +1,45 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 const Footer5 = ({ dark }) => {
+
+  const [email, setEmail] = useState("");
+  const router = useRouter();
+
+  const handleSubscribe = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch('/api/re_subscribed', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          email,
+        }),
+      });
+
+      if (response.ok) {
+        // Redirect to subscription successful page with email query parameter
+        router.push(`SubscriptionSuccessful`);
+      } else {
+        console.error('Error:', response.statusText);
+        // Handle error
+      }
+    } catch (error) {
+      console.error('Error: outside', error);
+      // Handle error
+    }
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (name === "email") {
+      setEmail(value);
+    }
+  };
   return (
     <footer className="main-footer footer-five pt-100">
       <div className="container container-1290 pb-40">
@@ -20,7 +59,7 @@ const Footer5 = ({ dark }) => {
                 </Link>
               </div>
               <p>
-              Simplify investments to take control and pave the way to prosperity like the new rich.
+                Simplify investments to take control and pave the way to prosperity like the new rich.
               </p>
             </div>
           </div>
@@ -44,8 +83,8 @@ const Footer5 = ({ dark }) => {
           </div>
           <div className="col-lg-4 col-md-6">
             <div className="footer-widget newsletter-widget wow fadeInUp delay-0-6s">
-              <form className="footer-newsletter" action="#">
-                <input type="email" placeholder="Email Address" required />
+              <form className="footer-newsletter" onSubmit={handleSubscribe}>
+                <input type="email" name="email" placeholder="Email Address" value={email} onChange={handleChange} required />
                 <button type="submit">
                   <i className="fas fa-arrow-right" />
                 </button>
