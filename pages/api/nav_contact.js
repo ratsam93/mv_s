@@ -3,7 +3,7 @@ import { google } from 'googleapis';
 const auth = new google.auth.GoogleAuth({
   credentials: {
     client_email: process.env.CLIENT_MAIL,
-    private_key: process.env.PRIVATE_KEY, // Replace newline characters
+    private_key: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'), // Replace newline characters
   },
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
