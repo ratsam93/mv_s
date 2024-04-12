@@ -32,11 +32,11 @@ const SideBar = () => {
           setShowSubmitMessage(false); // Hide submit message after 3 seconds
         }, 10000);
       } else {
-        console.error('Error 1:', response.statusText);
+        console.error('Error:', response.statusText);
         // Handle error
       }
     } catch (error) {
-      console.error('Error  2: outside', error);
+      console.error('Error: outside', error);
       // Handle error
     }
   };
